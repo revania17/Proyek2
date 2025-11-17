@@ -51,8 +51,6 @@ class FormPesanan extends BaseController
         }
     }
 
-
-
     public function tampilantabel()
     {
         $pesananModel = new PesananModel();
@@ -77,7 +75,7 @@ class FormPesanan extends BaseController
         $pesanan = $Model->find($id);
         $produk = $ProdukModel->find($pesanan['id_produk']);
 
-        $Model->update($id, [
+        $Model->update($id, [ 
             'status_pesanan' => 'selesai'
         ]);
 
@@ -89,4 +87,35 @@ class FormPesanan extends BaseController
         );
         return redirect()->to('/pesanan'); // balik ke halaman pesanan
     }
+
+    public function laporan()
+{
+    $periode = $this->request->getGet('periode') ?? 'harian';
+
+    $pesananModel = new PesananModel();
+
+    switch ($periode) {
+        case 'harian':
+            $laporan = $pesananModel->getLaporanHarian();
+            break;
+        case 'mingguan':
+            $laporan = $pesananModel->getLaporanMingguan();
+            break;
+        case 'bulanan':
+            $laporan = $pesananModel->getLaporanBulanan();
+            break;
+        default:
+            $laporan = $pesananModel->getLaporanHarian();
+            break;
+    }
+
+    $data = [
+        'produk' => $pesananModel->getPesananWithProduk(), // tabel pesanan
+        'laporan' => $laporan,
+        'periode' => $periode
+    ];
+
+    return view('data_pesanan', $data);
+}
+
 }

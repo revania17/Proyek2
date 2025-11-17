@@ -13,16 +13,17 @@ class Produk extends BaseController
         return view('home');
     }
 
-    // public function cari()
-    // {
-    //     $keyword = $this->request->getGet('keyword');
-    //     $produkModel = new ProdukModel();
+    public function cari()
+    {
+        $keyword = $this->request->getGet('keyword');
+        $produkModel = new ProdukModel();
 
-    //     $data['keyword'] = $keyword;
-    //     $data['produk'] = $produkModel->cariProduk($keyword);
+        $data['keyword'] = $keyword;
+        $data['produk'] = $produkModel->cariProduk($keyword);
 
-    //     return view('produk_search', $data);
-    // }
+
+        return view('cari', $data);
+    }
 
     // public function cari()
     // {

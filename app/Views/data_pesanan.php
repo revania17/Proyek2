@@ -80,6 +80,144 @@
                 </table>
             </div>
 
+            <!-- ===========================
+     LAPORAN PENJUALAN
+============================ -->
+            <div class="card shadow-sm mb-5">
+                <div class="card-body">
+
+                    <!-- Header Laporan -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0">Laporan Penjualan</h3>
+
+                        <!-- Tombol Export -->
+                        <div>
+                            <a href="<?= base_url('admin/laporan/export/pdf') ?>" class="btn btn-danger btn-sm">
+                                <i class="bi bi-file-earmark-pdf"></i> Download PDF
+                            </a>
+                            <a href="<?= base_url('admin/laporan/export/excel') ?>" class="btn btn-success btn-sm">
+                                <i class="bi bi-file-earmark-excel"></i> Download Excel
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Filter Periode -->
+                    <!-- Filter Periode -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <form method="get" action="<?= base_url('pesanan/laporan') ?>">
+                                <label class="form-label fw-bold">Pilih Periode</label>
+                                <select name="periode" class="form-select" onchange="this.form.submit()">
+                                    <option value="harian" <?= ($periode ?? '') == 'harian' ? 'selected' : '' ?>>Harian</option>
+                                    <option value="mingguan" <?= ($periode ?? '') == 'mingguan' ? 'selected' : '' ?>>Mingguan</option>
+                                    <option value="bulanan" <?= ($periode ?? '') == 'bulanan' ? 'selected' : '' ?>>Bulanan</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <!-- Tabel Laporan -->
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-center">Periode</th>
+                                    <th class="text-center">Jumlah Pesanan</th>
+                                    <th class="text-center">Total Pendapatan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($laporan)) : ?>
+                                    <?php foreach ($laporan as $row) : ?>
+                                        <tr>
+                                            <td class="text-center"><?= esc($row['periode']) ?></td>
+                                            <td class="text-center"><?= esc($row['total_pesanan']) ?></td>
+                                            <td class="text-center">Rp <?= number_format($row['total_pendapatan'], 0, ',', '.') ?></td>
+                                        </tr>
+                                    <?php endforeach ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">Belum ada data laporan.</td>
+                                    </tr>
+                                <?php endif ?>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                    <!-- Grafik -->
+                    <div>
+                        <h5 class="mb-3">Grafik Laporan</h5>
+                        <canvas id="chartLaporan" height="120"></canvas>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Chart.js -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                let chart; // untuk menyimpan grafik agar bisa di-update
+
+                document.getElementById('filter-periode').addEventListener('change', function() {
+                    const periode = this.value;
+                    if (!periode) return;
+
+                    // Fetch data dari controller
+                    fetch('/admin/laporan/filter?periode=' + periode)
+                        .then(res => res.json())
+                        .then(data => {
+                            updateTable(data, periode);
+                            updateChart(data, periode);
+                        });
+                });
+
+                function updateTable(data, periode) {
+                    let html = '';
+
+                    if (data.length === 0) {
+                        html = `<tr>
+                    <td colspan="3" class="text-center text-muted">Data tidak ditemukan.</td>
+                </tr>`;
+                    } else {
+                        data.forEach(row => {
+                            html += `
+                    <tr>
+                        <td class="text-center">${row.tanggal ?? row.minggu ?? row.bulan}</td>
+                        <td class="text-center">${row.total_pesanan}</td>
+                        <td class="text-center">Rp ${row.total_pendapatan}</td>
+                    </tr>`;
+                        });
+                    }
+
+                    document.getElementById('tabel-laporan').innerHTML = html;
+                }
+
+                function updateChart(data, periode) {
+                    const labels = data.map(r => r.tanggal ?? r.minggu ?? r.bulan);
+                    const values = data.map(r => r.total_pendapatan);
+
+                    const ctx = document.getElementById('chartLaporan').getContext('2d');
+
+                    // Hapus grafik sebelumnya jika ada
+                    if (chart) chart.destroy();
+
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Pendapatan (Rp)',
+                                data: values,
+                                borderWidth: 2,
+                                fill: false,
+                            }]
+                        }
+                    });
+                }
+            </script>
 
 
     </section>

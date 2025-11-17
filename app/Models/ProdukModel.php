@@ -19,15 +19,13 @@ class ProdukModel extends Model
     protected $createdField  = 'dibuat';
     protected $updatedField  = 'diubah';
 
-    // public function cariProduk($keyword)
-    // {
-    // return $this->table('produk')
-    //     ->like('nama_produk', $keyword)
-    //     ->orLike('deskripsi', $keyword)
-    //     ->orLike('provider', $keyword)
-    //     ->get()
-    //     ->getResult();
-    // }
+    public function cariProduk($keyword)
+    {
+    return $this->like ('nama_produk', $keyword)
+        ->orLike('deskripsi', $keyword)
+        ->orLike('provider', $keyword)
+        ->findAll();
+    }
 
     // public function cari_produk(string $keyword)
     // {
