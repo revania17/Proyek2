@@ -23,6 +23,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAdmin">
                 <ul class="navbar-nav text-end">
                     <li class="nav-item"><a class="nav-link active" href="<?= base_url('Admin') ?>">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= base_url('dashboard') ?>">Dashboard Overview</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('pesanan') ?>">Data Pesanan</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('logout') ?>"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                 </ul>
