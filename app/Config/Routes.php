@@ -48,3 +48,5 @@ $routes->get('pesanan', 'FormPesanan::tampilantabel');       // Menampilkan tabe
 $routes->get('pesanan/laporan', 'FormPesanan::laporan');     // Menampilkan laporan penjualan sesuai periode
 $routes->get('/admin/laporan/export/pdf', 'LaporanController::exportPDF');
 $routes->get('/admin/laporan/export/excel', 'LaporanController::exportExcel');
+
+$routes->get('dashboard', 'Dashboard::index');
