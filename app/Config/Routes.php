@@ -44,9 +44,8 @@ $routes->get('update/(:num)', 'FormPesanan::update/$1');
 $routes->get('delete/(:num)', 'FormPesanan::delete/$1');
 
 // Data pesanan dan laporan penjualan
-$routes->get('pesanan', 'FormPesanan::tampilantabel');       // Menampilkan tabel pesanan
-$routes->get('pesanan/laporan', 'FormPesanan::laporan');     // Menampilkan laporan penjualan sesuai periode
-$routes->get('/admin/laporan/export/pdf', 'LaporanController::exportPDF');
-$routes->get('/admin/laporan/export/excel', 'LaporanController::exportExcel');
+$routes->get('laporan', 'FormPesanan::laporan');
+$routes->get('export/pdf', 'DownloadLaporan::exportPDF');
+$routes->get('export/excel', 'DownloadLaporan::exportExcel');
 
 $routes->get('dashboard', 'Dashboard::index');

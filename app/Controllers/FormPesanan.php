@@ -88,34 +88,22 @@ class FormPesanan extends BaseController
         return redirect()->to('/pesanan'); // balik ke halaman pesanan
     }
 
-    public function laporan()
-{
-    $periode = $this->request->getGet('periode') ?? 'harian';
+     public function laporan(){
+        $model = new PesananModel();
 
-    $pesananModel = new PesananModel();
+        $tanggalMulai = $this->request->getGet('mulai');
+        $tanggalAkhir = $this->request->getGet('akhir');
 
-    switch ($periode) {
-        case 'harian':
-            $laporan = $pesananModel->getLaporanHarian();
-            break;
-        case 'mingguan':
-            $laporan = $pesananModel->getLaporanMingguan();
-            break;
-        case 'bulanan':
-            $laporan = $pesananModel->getLaporanBulanan();
-            break;
-        default:
-            $laporan = $pesananModel->getLaporanHarian();
-            break;
+        $laporan = $model->getLaporan($tanggalMulai, $tanggalAkhir);
+        $totalPesanan = count($laporan);
+        $totalPendapatan = array_sum(array_column($laporan, 'harga_produk'));
+
+        return view('data_pesanan', [
+            'produk'          => (new PesananModel())->getPesananWithProduk(),
+            'totalPesanan'    => $totalPesanan,
+            'totalPendapatan' => $totalPendapatan,
+            'tanggalMulai'    => $tanggalMulai,
+            'tanggalAkhir'    => $tanggalAkhir,
+        ]);
     }
-
-    $data = [
-        'produk' => $pesananModel->getPesananWithProduk(), // tabel pesanan
-        'laporan' => $laporan,
-        'periode' => $periode
-    ];
-
-    return view('data_pesanan', $data);
-}
-
 }

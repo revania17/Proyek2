@@ -23,8 +23,8 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNavAdmin">
                 <ul class="navbar-nav text-end">
+                    <li class="nav-item"><a class="nav-link active" href="<?= base_url('dashboard') ?>">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin') ?>">Daftar Produk</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="<?= base_url('dashboard') ?>">Dashboard Overview</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('pesanan') ?>">Data Pesanan</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('logout') ?>"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                 </ul>
@@ -152,8 +152,8 @@
                 <!-- Transaksi Terbaru -->
                 <div class="col-xl-4 col-lg-5">
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Transaksi Terbaru</h6>
+                        <div class="card-header py-3"> 
+                            <h6 class="m-0 font-weight-bold text">Transaksi Terbaru</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

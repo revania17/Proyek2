@@ -25,33 +25,18 @@ class PesananModel extends Model
             ->findAll();
     }
 
-    public function getLaporanHarian()
+    public function getLaporan($tanggalMulai = null, $tanggalAkhir = null)
     {
-        return $this->select("DATE(dibuat) as periode, COUNT(*) as total_pesanan, SUM(produk.harga) as total_pendapatan")
+        $builder = $this->select('pesanan.*, produk.nama_produk, produk.harga_produk, produk.provider, produk.deskripsi, tb_user.nama_lengkap')
             ->join('produk', 'produk.id_produk = pesanan.id_produk')
-            ->where('status_pesanan', 'selesai')
-            ->groupBy('DATE(dibuat)')
-            ->orderBy('periode', 'DESC')
-            ->findAll();
-    }
+            ->join('tb_user', 'tb_user.id_user = pesanan.id_user') // 🔥 join ke tabel user
+            ->where('pesanan.status_pesanan', 'selesai');
 
-    public function getLaporanMingguan()
-    {
-        return $this->select("YEARWEEK(dibuat) as periode, COUNT(*) as total_pesanan, SUM(produk.harga) as total_pendapatan")
-            ->join('produk', 'produk.id_produk = pesanan.id_produk')
-            ->where('status_pesanan', 'selesai')
-            ->groupBy('YEARWEEK(dibuat)')
-            ->orderBy('periode', 'DESC')
-            ->findAll();
-    }
+        if ($tanggalMulai && $tanggalAkhir) {
+            $builder->where('pesanan.dibuat >=', $tanggalMulai . ' 00:00:00')
+                ->where('pesanan.dibuat <=', $tanggalAkhir . ' 23:59:59');
+        }
 
-    public function getLaporanBulanan()
-    {
-        return $this->select("DATE_FORMAT(dibuat, '%Y-%m') as periode, COUNT(*) as total_pesanan, SUM(produk.harga) as total_pendapatan")
-            ->join('produk', 'produk.id_produk = pesanan.id_produk')
-            ->where('status_pesanan', 'selesai')
-            ->groupBy("DATE_FORMAT(dibuat, '%Y-%m')")
-            ->orderBy('periode', 'DESC')
-            ->findAll();
+        return $builder->findAll();
     }
 }
