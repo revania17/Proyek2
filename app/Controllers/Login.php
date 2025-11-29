@@ -33,6 +33,39 @@ class Login extends BaseController
 
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
+        $captcha_response = $this->request->getPost('g-recaptcha-response');
+
+        // ===== VALIDASI CAPTCHA =====
+        if (empty($captcha_response)) {
+            return redirect()->back()->with('error', 'Harap verifikasi bahwa Anda bukan robot.');
+        }
+
+        // Verify captcha dengan Google
+        $secret_key = getenv('RECAPTCHA_SECRET_KEY');
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        
+        $data = [
+            'secret' => $secret_key,
+            'response' => $captcha_response,
+            'remoteip' => $this->request->getIPAddress()
+        ];
+
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data)
+            ]
+        ];
+
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        $result_json = json_decode($result, true);
+
+        if (!$result_json['success']) {
+            return redirect()->back()->with('error', 'Verifikasi CAPTCHA gagal. Silakan coba lagi.');
+        }
+        // ===== END VALIDASI CAPTCHA =====
 
         // Cari user berdasarkan username
         $user = $userModel->where('username', $username)->first();
@@ -41,8 +74,6 @@ class Login extends BaseController
             // Jika username tidak ditemukan
             return redirect()->back()->with('error', 'Akun belum terdaftar! Silahkan daftar dulu');
         }
-
-
 
         if (!password_verify($password, $user['password'])) {
             // Jika password salah
