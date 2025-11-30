@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProdukModel;
+use App\Models\PesananModel;
 
 class Dashboard extends BaseController
 {
@@ -30,20 +31,20 @@ class Dashboard extends BaseController
         try {
             // Test koneksi database
             $db = \Config\Database::connect();
-            
+
             if (!$db->connect()) {
                 throw new \Exception('Koneksi database gagal');
             }
 
             // Load model
             $produkModel = new ProdukModel();
-            
+
             // Total Users - menggunakan tb_user
             $data['totalUsers'] = $db->table('tb_user')->countAll();
-            
+
             // Total Transactions
             $data['totalTransactions'] = $db->table('pesanan')->countAll();
-            
+
             // Total Revenue
             $revenueResult = $db->table('pesanan')
                 ->select('SUM(produk.harga_produk) as total')
@@ -52,7 +53,7 @@ class Dashboard extends BaseController
                 ->get()
                 ->getRow();
             $data['totalRevenue'] = $revenueResult->total ?? 0;
-            
+
             // Best Selling Product
             $bestProduct = $db->table('pesanan')
                 ->select('produk.nama_produk, COUNT(pesanan.id_produk) as total_terjual')
@@ -63,11 +64,25 @@ class Dashboard extends BaseController
                 ->limit(1)
                 ->get()
                 ->getRow();
-            
+
             if ($bestProduct) {
                 $data['bestSellingProduct'] = $bestProduct->nama_produk . ' (' . $bestProduct->total_terjual . ' terjual)';
             }
-            
+
+            // Pelanggan Tetap (paling sering beli)
+            $topBuyer = $db->table('pesanan')
+                ->select('tb_user.nama_lengkap, COUNT(pesanan.id_pesanan) as total_beli')
+                ->join('tb_user', 'tb_user.id_user = pesanan.id_user')
+                ->where('status_pesanan', 'selesai')
+                ->groupBy('pesanan.id_user')
+                ->orderBy('total_beli', 'DESC')
+                ->limit(1)
+                ->get()
+                ->getRow();
+
+            $data['pelangganTetap'] = $topBuyer ? $topBuyer->nama_lengkap . " (" . $topBuyer->total_beli . " transaksi)" : 'Data tidak tersedia';
+
+
             // Recent Transactions
             $data['recentTransactions'] = $db->table('pesanan')
                 ->select('pesanan.*, produk.nama_produk, tb_user.nama_lengkap')
@@ -81,12 +96,15 @@ class Dashboard extends BaseController
             // Stock notifications
             $data['lowStockProducts'] = $produkModel->getLowStockProducts();
             $data['outOfStockProducts'] = $produkModel->getOutOfStockProducts();
-
         } catch (\Exception $e) {
             // Set flag error
             $data['dbError'] = true;
             $data['errorMessage'] = $e->getMessage();
         }
+
+        // --- Grafik Bulanan ---
+        $pesananModel = new PesananModel();
+        $data['monthlySales'] = $pesananModel->getMonthlySales();
 
         return view('dashboard', $data);
     }

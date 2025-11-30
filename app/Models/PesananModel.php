@@ -39,4 +39,13 @@ class PesananModel extends Model
 
         return $builder->findAll();
     }
+
+    public function getMonthlySales()
+    {
+        return $this->select("DATE_FORMAT(dibuat, '%Y-%m') AS bulan, COUNT(*) AS total")
+            ->where('status_pesanan', 'selesai')
+            ->groupBy('bulan')
+            ->orderBy('bulan', 'ASC')
+            ->findAll();
+    }
 }
