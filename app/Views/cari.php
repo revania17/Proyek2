@@ -8,144 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
-    <!-- <style>
-        body {
-            background: linear-gradient(to right, #a83252, #1a1a2e);
-            color: white;
-            font-family: Georgia, 'Times New Roman', Times, serif;
-        }
-
-        .navbar {
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            height: 70px;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .navbar-toggler-icon {
-            filter: invert(1);
-        }
-
-        .nav-link {
-            position: relative;
-            color: #fff !important;
-            font-weight: 500;
-            font-size: 18px;
-            padding: 8px 12px;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .nav-link:hover {
-            transform: translateY(-3px);
-            text-shadow:
-                0 2px 4px rgba(0, 0, 0, 0.7),
-                0 4px 8px rgba(0, 0, 0, 0.6),
-                0 6px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-section {
-            padding-top: 100px;
-        }
-
-        /* RESPONSIVE NAV */
-        @media (max-width: 768px) {
-            .navbar-collapse {
-                background-color: white;
-                /* ungu pastel transparan */
-                border-radius: 12px;
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-                position: absolute;
-                top: 70px;
-                right: 16px;
-                width: 180px;
-                padding: 10px 14px;
-                z-index: 999;
-            }
-
-            .navbar-nav {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-link {
-                color: #222 !important;
-                /* hitam keabu, biar kontras */
-                font-size: 16px;
-                font-weight: 600;
-                padding: 8px 0;
-                width: 100%;
-                border-radius: 6px;
-                transition: background-color 0.2s ease;
-            }
-
-            .nav-link:hover {
-                background-color: rgba(255, 255, 255, 0.5);
-                /* efek hover lembut */
-                text-shadow: none;
-                transform: none;
-            }
-        }
-
-        /* === SEARCH === */
-        .search-container {
-            flex-grow: 1;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            width: auto !important;
-            flex-shrink: 0;
-            order: 0;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: white;
-            border-radius: 50px;
-            padding: 12px 25px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(12px);
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .search-box .search-icon {
-            font-size: 20px;
-            color: #5a1b34;
-            margin-right: 15px;
-        }
-
-        .search-box input {
-            width: 100%;
-            border: none;
-            outline: none;
-            background: transparent;
-            font-size: 16px;
-            color: #333;
-        }
-
-        /* Responsif */
-        @media(max-width: 576px) {
-            .search-box {
-                padding: 10px 18px;
-            }
-        }
-
-        .logo-layanan {
-            max-width: 80px;
-        }
-
-        .card-voucher {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            transition: transform 0.2s;
-            border: none;
-        }
-
-        .card-voucher:hover {
-            transform: scale(1.02);
-        }
+    <style>
 
         .btn-tambah {
             background-color: #fff;
@@ -159,11 +22,7 @@
             color: #000;
         }
 
-        footer {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
-    </style> -->
+    </style>
 </head>
 
 <body>
@@ -217,24 +76,43 @@
                     <div class="col-md-4 mb-4">
                         <div class="card shadow-sm card-voucher h-100 text-center">
                             <div class="card-body">
-                                <img src="images/logo axis.png" alt="Logo" class="logo-layanan mb-3" />
+
+                                <?php
+                                $logo = 'default.png';
+
+                                if ($data['provider'] == 'Axis') {
+                                    $logo = 'logo axis.png';
+                                } elseif ($data['provider'] == 'Telkomsel') {
+                                    $logo = 'logo telkom.png';
+                                } elseif ($data['provider'] == 'Smartfren') {
+                                    $logo = 'logo smartfren.png';
+                                } elseif ($data['provider'] == 'XL') {
+                                    $logo = 'logo xl.png';
+                                } elseif ($data['provider'] == 'Indosat') {
+                                    $logo = 'logo indosat.png';
+                                } elseif ($data['provider'] == 'Tri') {
+                                    $logo = 'logo tri.png';
+                                }
+                                ?>
+
+                                <img src="<?= base_url('images/' . $logo) ?>"
+                                    alt="<?= $data['provider'] ?>"
+                                    class="logo-layanan mb-3" />
+
                                 <h5 class="card-title"><?= $data['provider'] ?> <?= $data['nama_produk'] ?></h5>
                                 <p class="card-text"><?= $data['deskripsi'] ?></p>
-                                <a href="<?= base_url('form?id_voucher=' . $data['id_produk']) ?>" class="btn btn-tambah">Beli Paket Data</a>
+                                <a href="<?= base_url('form?id_voucher=' . $data['id_produk']) ?>" class="btn btn-tambah">
+                                    Beli Paket Data
+                                </a>
                             </div>
                         </div>
                     </div>
+
             <?php endif;
             endforeach ?>
 
         </div>
     </div>
-
-    <!-- footer -->
-    <footer class="text-center py-3">
-        <p>&copy; 2023 Creative Cell. All rights reserved.</p>
-        <p>📍Jl. Sarikaso III No.3, Sarijadi, Kec. Sukasari, Kota Bandung, Jawa Barat 40151</p>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

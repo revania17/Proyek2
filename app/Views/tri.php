@@ -180,7 +180,6 @@
   <!-- footer -->
   <footer class="text-center py-3">
     <p>&copy; 2023 Creative Cell. All rights reserved.</p>
-     <p>📍Jl. Sarikaso III No.3, Sarijadi, Kec. Sukasari, Kota Bandung, Jawa Barat 40151</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

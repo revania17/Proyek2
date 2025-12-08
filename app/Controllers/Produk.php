@@ -25,50 +25,6 @@ class Produk extends BaseController
         return view('cari', $data);
     }
 
-    // public function cari()
-    // {
-    //     // 1. Ambil keyword dari input GET (nama="keyword")
-    //     $keyword = $this->request->getGet('keyword');
-        
-    //     // Pastikan keyword tidak kosong
-    //     if (empty($keyword)) {
-    //         // Jika kosong, arahkan kembali ke homepage atau tampilkan pesan error
-    //         return redirect()->to(base_url('/'))->with('error', 'Masukkan kata kunci pencarian.');
-    //     }
-
-    //     // 2. Panggil Model untuk menjalankan query database
-    //     $model = new ProdukModel();
-        
-    //     // Panggil fungsi cari_produk di Model
-    //     $data_hasil_cari = $model->cari_produk($keyword);
-
-    //     // 3. Siapkan data untuk dikirim ke View
-    //     $data = [
-    //         'keyword_cari' => $keyword,
-    //         'hasil_produk' => $data_hasil_cari,
-    //         'total_hasil'  => count($data_hasil_cari)
-    //     ];
-
-    //     // 4. Muat View hasil pencarian
-    //     // Di sini Anda akan memuat halaman yang menampilkan daftar semua hasil pencarian.
-    //     return view('view_hasil_cari', $data);
-    // }
-
-    // public function cari()
-    // {
-    //     $keyword = $this->request->getGet('keyword');
-
-    //     // Ambil semua produk sesuai provider
-    //     $produk = $this->ProdukModel->getByKeyword($keyword);
-
-    //     $data = [
-    //         'produk' => $produk,
-    //         'keyword' => $keyword
-    //     ];
-
-    //     return view('produk_view', $data);
-    // }
-
     public function axis()
     {
         $model = new ProdukModel();

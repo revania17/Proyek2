@@ -43,7 +43,6 @@ $routes->get('produk/delete/(:num)', 'Produk::delete/$1');
 $routes->get('update/(:num)', 'FormPesanan::update/$1');
 $routes->get('delete/(:num)', 'FormPesanan::delete/$1');
 
-// Data pesanan dan laporan penjualan
 $routes->get('laporan', 'FormPesanan::laporan');
 $routes->get('export/pdf', 'DownloadLaporan::exportPDF');
 $routes->get('export/excel', 'DownloadLaporan::exportExcel');

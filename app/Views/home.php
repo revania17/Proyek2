@@ -168,8 +168,13 @@
 
   <!-- footer -->
   <footer class="text-center py-3">
-    <p>&copy; 2023 Creative Cell. All rights reserved.</p>
-    <p>📍Jl. Sarikaso III No.3, Sarijadi, Kec. Sukasari, Kota Bandung, Jawa Barat 40151</p>
+    <h5 class>Konfirmasi & Pembayaran</h5>
+    <p> Setelah melakukan pemesanan paket data, silakan hubungi admin melalui WhatsApp untuk menanyakan metode pembayaran atau mengirimkan bukti transfer.</p>
+    <a href="https://wa.me/62895364581110?text=Halo%20Admin,%20saya%20sudah%20melakukan%20pemesanan%20paket%20data.%20Mohon%20informasi%20pembayarannya.%20Terima%20kasih."
+      target="_blank"
+      class="btn btn-success fw-bold px-4 py-2 mb-3">
+      <i class="bi bi-whatsapp me-2"></i> Hubungi Admin via WhatsApp
+    </a>
   </footer>
 
   <!-- script -->

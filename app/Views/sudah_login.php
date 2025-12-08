@@ -164,7 +164,6 @@
 
   <footer class="text-center">
     <p>&copy; 2025 Creative Cell. All rights reserved.</p>
-    <p>📍Jl. Sarikaso III No.3, Sarijadi, Kec. Sukasari, Kota Bandung, Jawa Barat 40151</p>
   </footer>
 </body>
 </html>
