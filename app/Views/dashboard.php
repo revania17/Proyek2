@@ -224,15 +224,17 @@
 
                 <!-- Grafik Penjualan Bulanan -->
                 <div class="col-lg-8">
-                    <div class="card shadow mb-4">
+                    <div class="card shadow mb-4"> <!-- card sama seperti transaksi terbaru -->
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold">Grafik Penjualan Bulanan</h6>
+                            <h6 class="m-0 font-weight-bold text-white">Grafik Penjualan Bulanan</h6>
                         </div>
-                        <div class="card-body">
+
+                        <div class="card-body bg-white rounded-bottom">
                             <canvas id="monthlyChart"></canvas>
                         </div>
                     </div>
                 </div>
+
             </div>
 
     </section>
@@ -246,28 +248,51 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Data grafik bulanan
-        const monthlyLabels = <?= json_encode(array_column($monthlySales, 'bulan')); ?>;
-        const monthlyData = <?= json_encode(array_column($monthlySales, 'total')); ?>;
+        const rawLabels = <?= json_encode(array_column($monthlySales, 'bulan')); ?>;
+        const rawData = <?= json_encode(array_column($monthlySales, 'total')); ?>;
+
+        const year = rawLabels.length > 0 ?
+            rawLabels[0].split('-')[0] :
+            new Date().getFullYear();
+
+        const allMonths = Array.from({
+            length: 12
+        }, (_, i) => {
+            const month = String(i + 1).padStart(2, '0');
+            return `${year}-${month}`;
+        });
+
+        const finalData = allMonths.map(month => {
+            const index = rawLabels.indexOf(month);
+            return index !== -1 ? rawData[index] : 0;
+        });
 
         const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+
         new Chart(ctxMonthly, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: monthlyLabels,
+                labels: allMonths,
                 datasets: [{
                     label: 'Jumlah Transaksi Selesai',
-                    data: monthlyData,
-                    borderWidth: 1,
+                    data: finalData,
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: false,
+                    borderColor: 'rgba(153, 102, 255, 1)',
                     backgroundColor: 'rgba(153, 102, 255, 0.4)',
-                    borderColor: 'rgba(153, 102, 255, 1)'
+                    pointRadius: 5,
+                    pointHoverRadius: 7
                 }]
             },
             options: {
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
                     }
                 }
             }
